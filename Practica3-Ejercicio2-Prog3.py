@@ -64,3 +64,51 @@ variables_fijadas = {13:4, 14:7, 15:5, 19:3,
 sudoku = csp.Problem()
 # Completar
 # ...
+
+def sudoku():
+    variables_fijadas = {13:4, 14:7, 15:5, 19:3,
+                     26:8, 27:4,
+                     35:6, 38:7, 39:5,
+                     41:6, 42:3, 47:5,
+                     52:8, 58:6,
+                     63:5, 68:9, 69:1,
+                     71:8, 72:4, 75:3,
+                     83:9, 84:8,
+                     91:3, 95:9, 96:7, 97:1}
+
+
+    variables = range(1, 10)
+    dominio = range(1,10)
+    sudoku = csp.Problem()
+    #reinas = csp.Problem(csp.BacktrackingSolver)
+
+    for x in variables:
+        sudoku.addVariable(x,dominio)
+
+    # Restricción de diagonal
+    for i in range(1,10):
+        for j in range(1,10):
+            # posicion = ij
+            for x in range(1,10):
+                sudoku.addConstraint(csp.FunctionConstraint(lambda i,j: i != j),variables)
+
+            # reinas.addConstraint(csp.FunctionConstraint(lambda x, y: x != y),
+            #                      [variables[i], variables[j]])
+
+    return sudoku
+
+# Testear si la definición de la función es correcta
+reinas_obj = sudoku() 
+# Medición de tiempo
+# start = time.time()
+solver = csp.BacktrackingSolver(reinas_obj)
+
+# set solver: es un método utilizado para establecer el solucionador 
+# que se utilizará para resolver un problema de restricción.
+reinas_obj.setSolver(solver)
+
+#soluciones = reinas_obj.getSolutions() # devuelve una lista de diccionarios
+unica_sol = reinas_obj.getSolution()
+# print(unica_sol)
+# end = time.time()
+# print("Tiempo total: ", end-start)
